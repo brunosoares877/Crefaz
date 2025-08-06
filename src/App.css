@@ -1,0 +1,114 @@
+/* Reset e estilos globais */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* Estilos para inputs */
+input, select {
+  outline: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+input:focus, select:focus {
+  border-color: #0066cc !important;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+/* Estilos para botões */
+button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Estilos para links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .App main {
+    padding: 4rem 0.5rem 1rem !important;
+  }
+  
+  .App main h1 {
+    font-size: 1.75rem !important;
+    padding: 0 1rem;
+  }
+  
+  .LoanForm {
+    padding: 1.5rem !important;
+    margin: 0 0.5rem;
+  }
+  
+  .WarningMessage {
+    margin: 1rem 0.5rem 0 !important;
+    padding: 0.75rem !important;
+  }
+  
+  .WarningMessage p {
+    font-size: 0.875rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .App main h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  .LoanForm {
+    padding: 1rem !important;
+  }
+  
+  .LoanForm input,
+  .LoanForm select {
+    padding: 0.625rem !important;
+    font-size: 0.875rem !important;
+  }
+  
+  .LoanForm button {
+    padding: 0.875rem 1.5rem !important;
+    font-size: 1rem !important;
+  }
+  
+  .LoanForm label {
+    font-size: 0.75rem !important;
+  }
+  
+  .LoanForm p {
+    font-size: 0.75rem !important;
+  }
+}
+
+/* Melhorias para telas muito pequenas */
+@media (max-width: 360px) {
+  .App main {
+    padding: 3rem 0.25rem 1rem !important;
+  }
+  
+  .LoanForm {
+    padding: 0.75rem !important;
+  }
+  
+  .App main h1 {
+    font-size: 1.25rem !important;
+  }
+} 

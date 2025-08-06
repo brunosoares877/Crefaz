@@ -1,0 +1,17 @@
+<svg width="300" height="100" viewBox="0 0 300 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo S estilizado em cinza claro -->
+  <g transform="translate(10, 10)">
+    <!-- Parte superior do S -->
+    <rect x="5" y="10" width="35" height="12" rx="6" fill="#E5E5E5"/>
+    <!-- Parte central do S -->
+    <rect x="15" y="32" width="25" height="10" rx="5" fill="#E5E5E5"/>
+    <!-- Parte inferior do S -->
+    <rect x="5" y="54" width="35" height="12" rx="6" fill="#E5E5E5"/>
+    <!-- Conectores -->
+    <rect x="12" y="22" width="4" height="10" rx="2" fill="#E5E5E5"/>
+    <rect x="28" y="42" width="4" height="12" rx="2" fill="#E5E5E5"/>
+  </g>
+  
+  <!-- Texto SOLUTION -->
+  <text x="80" y="55" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#E5E5E5" letter-spacing="3px">SOLUTION</text>
+</svg>
