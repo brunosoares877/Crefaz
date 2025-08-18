@@ -1,35 +1,39 @@
 import React from 'react'
 import { colors, typography } from '../../styles/design-tokens'
+import { WhatsAppIcon } from '../ui/WhatsAppIcon'
+import { useNavigation } from '../../src/contexts/NavigationContext'
 
 export const Footer: React.FC = () => {
+  const { navigateTo } = useNavigation()
+  
   return (
     <footer style={{
       backgroundColor: colors.darkBlue,
       color: colors.white,
-      padding: '3rem 2rem',
-      marginTop: '4rem',
+      padding: 'clamp(2rem, 6vw, 3rem) clamp(1rem, 4vw, 2rem)',
+      marginTop: 'clamp(2rem, 8vw, 4rem)',
     }}>
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: '3rem',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: 'clamp(1.5rem, 5vw, 3rem)',
       }}>
-        {/* Coluna 1 - Informações da Empresa */}
+        {/* Coluna 1 - Informações da Empresa + Contatos */}
         <div>
           <h3 style={{
-            fontSize: typography.fontSize.lg,
+            fontSize: 'clamp(1rem, 3.5vw, 1.125rem)',
             fontWeight: typography.fontWeight.bold,
-            marginBottom: '1rem',
+            marginBottom: 'clamp(0.75rem, 2vw, 1rem)',
             fontFamily: typography.fontFamily.primary,
           }}>
-            REALLIZI COBRANCAS E INFORMACOES CADASTRAIS EIRELI
+            SOLUTION MAIS CORRESPONDENTE BANCARIO LTDA
           </h3>
           
           <p style={{
-            fontSize: typography.fontSize.sm,
-            marginBottom: '0.5rem',
+            fontSize: 'clamp(0.75rem, 2.5vw, 0.875rem)',
+            marginBottom: 'clamp(0.25rem, 1vw, 0.5rem)',
             fontFamily: typography.fontFamily.primary,
           }}>
             CNPJ 29.324.455/0001-44
@@ -55,9 +59,10 @@ export const Footer: React.FC = () => {
             fontSize: typography.fontSize.xs,
             lineHeight: typography.lineHeight.relaxed,
             fontFamily: typography.fontFamily.primary,
+            marginBottom: '2rem',
           }}>
             <p style={{ marginBottom: '0.5rem' }}>
-              A REALLIZI COBRANCAS E INFORMACOES CADASTRAIS EIRELI atua como correspondente bancário, 
+              A SOLUTION MAIS CORRESPONDENTE BANCARIO LTDA atua como correspondente bancário, 
               oferecendo serviços de intermediação para produtos financeiros. As taxas de juros e 
               condições são definidas pelas instituições financeiras parceiras.
             </p>
@@ -70,18 +75,48 @@ export const Footer: React.FC = () => {
               Desconfie de propostas que pedem dinheiro antes da aprovação.
             </p>
           </div>
-        </div>
 
-        {/* Coluna 2 - Contatos */}
-        <div>
           <h3 style={{
-            fontSize: typography.fontSize.lg,
+            fontSize: 'clamp(1rem, 3.5vw, 1.125rem)',
             fontWeight: typography.fontWeight.bold,
-            marginBottom: '1rem',
+            marginBottom: 'clamp(0.75rem, 2vw, 1rem)',
             fontFamily: typography.fontFamily.primary,
           }}>
             CONTATOS
           </h3>
+          
+          <div 
+            onClick={() => {
+              const phoneNumber = '5584994616051'
+              const message = 'Olá, gostaria de fazer uma simulação.'
+              const encodedMessage = encodeURIComponent(message)
+              const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
+              window.open(whatsappUrl, '_blank')
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              marginBottom: '1rem',
+              fontSize: typography.fontSize.base,
+              fontFamily: typography.fontFamily.primary,
+              cursor: 'pointer',
+              transition: 'opacity 0.2s',
+              padding: '0.5rem',
+              borderRadius: '0.5rem',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '0.7'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '1'
+            }}
+          >
+            <div style={{ color: '#25D366' }}>
+              <WhatsAppIcon size="md" />
+            </div>
+            <span>(84) 99461-6051</span>
+          </div>
           
           <div style={{
             display: 'flex',
@@ -95,14 +130,28 @@ export const Footer: React.FC = () => {
             <span>(84) 2030-2584</span>
           </div>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            marginBottom: '1rem',
+            fontSize: typography.fontSize.base,
+            fontFamily: typography.fontFamily.primary,
+          }}>
+            <span>📧</span>
+            <span>sac@solutionpromotora.com.br</span>
+          </div>
+          
+          <div style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '0.5rem',
+            marginTop: '2rem'
+          }}>
             {[
-              { text: 'Sobre Nós', icon: '📄' },
-              { text: 'Dúvidas', icon: '❓' },
-              { text: 'Blog', icon: '📝' },
-              { text: 'Política de Privacidade', icon: '🔒' },
-              { text: 'Termo de Consentimento', icon: '📋' },
-              { text: 'Reclame Aqui', icon: '📢' },
+              { text: 'Política de Privacidade', icon: '🔒', action: () => navigateTo('privacy') },
+              { text: 'Termos de Uso', icon: '📋', action: () => navigateTo('terms') },
+              { text: 'Reclame Aqui', icon: '📢', action: null },
             ].map((item, index) => (
               <div key={index} style={{
                 display: 'flex',
@@ -110,11 +159,21 @@ export const Footer: React.FC = () => {
                 gap: '0.5rem',
                 fontSize: typography.fontSize.sm,
                 fontFamily: typography.fontFamily.primary,
-                cursor: 'pointer',
+                cursor: item.action ? 'pointer' : 'default',
                 transition: 'opacity 0.2s',
+                opacity: item.action ? 1 : 0.7,
               }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              onMouseEnter={(e) => {
+                if (item.action) {
+                  e.currentTarget.style.opacity = '0.7'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (item.action) {
+                  e.currentTarget.style.opacity = '1'
+                }
+              }}
+              onClick={item.action || undefined}
               >
                 <span>{item.icon}</span>
                 <span>{item.text}</span>
@@ -126,9 +185,9 @@ export const Footer: React.FC = () => {
         {/* Coluna 3 - Redes Sociais */}
         <div>
           <h3 style={{
-            fontSize: typography.fontSize.lg,
+            fontSize: 'clamp(1rem, 3.5vw, 1.125rem)',
             fontWeight: typography.fontWeight.bold,
-            marginBottom: '1rem',
+            marginBottom: 'clamp(0.75rem, 2vw, 1rem)',
             fontFamily: typography.fontFamily.primary,
           }}>
             ACOMPANHE NOSSAS REDES SOCIAIS

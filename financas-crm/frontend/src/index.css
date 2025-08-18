@@ -1,0 +1,228 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-dark-bg text-white;
+  }
+  
+  * {
+    @apply border-dark-border;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-navy-light hover:bg-navy-medium text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-navy-light focus:ring-offset-2 focus:ring-offset-dark-bg;
+  }
+  
+  .btn-secondary {
+    @apply bg-dark-hover hover:bg-dark-border text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-navy-light focus:ring-offset-2 focus:ring-offset-dark-bg;
+  }
+  
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-dark-bg;
+  }
+  
+  .input-field {
+    @apply bg-dark-hover border border-dark-border text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-navy-light focus:border-transparent transition-colors;
+  }
+  
+  .card {
+    @apply bg-dark-card border border-dark-border rounded-lg p-6;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-navy-light to-navy-medium bg-clip-text text-transparent;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Animações personalizadas */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+.animate-pulse-gentle {
+  animation: pulse-gentle 2s infinite;
+}
+
+/* Estilos para gráficos Recharts */
+.recharts-tooltip-wrapper {
+  @apply z-50;
+}
+
+.recharts-default-tooltip {
+  @apply bg-dark-card border border-dark-border rounded-lg shadow-xl !important;
+}
+
+.recharts-tooltip-label {
+  @apply text-white !important;
+}
+
+.recharts-tooltip-item {
+  @apply text-gray-300 !important;
+}
+
+/* Estilos para formulários */
+.form-group {
+  @apply space-y-2;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-300;
+}
+
+.form-input {
+  @apply input-field w-full;
+}
+
+.form-select {
+  @apply input-field w-full;
+}
+
+.form-textarea {
+  @apply input-field w-full resize-none;
+}
+
+/* Estilos para tabelas */
+.table-container {
+  @apply overflow-x-auto;
+}
+
+.table {
+  @apply min-w-full divide-y divide-dark-border;
+}
+
+.table-header {
+  @apply bg-dark-hover;
+}
+
+.table-header th {
+  @apply px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider;
+}
+
+.table-body {
+  @apply bg-dark-card divide-y divide-dark-border;
+}
+
+.table-row {
+  @apply hover:bg-dark-hover transition-colors;
+}
+
+.table-cell {
+  @apply px-6 py-4 whitespace-nowrap text-sm text-white;
+}
+
+/* Estilos para modais */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4;
+}
+
+.modal-content {
+  @apply bg-dark-card rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto;
+}
+
+.modal-header {
+  @apply px-6 py-4 border-b border-dark-border;
+}
+
+.modal-body {
+  @apply px-6 py-4;
+}
+
+.modal-footer {
+  @apply px-6 py-4 border-t border-dark-border flex justify-end space-x-3;
+}
+
+/* Estilos para badges */
+.badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.badge-success {
+  @apply bg-green-100 text-green-800;
+}
+
+.badge-warning {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.badge-danger {
+  @apply bg-red-100 text-red-800;
+}
+
+.badge-info {
+  @apply bg-blue-100 text-blue-800;
+}
+
+/* Estilos para loading */
+.loading-spinner {
+  @apply animate-spin rounded-full border-2 border-gray-300 border-t-navy-light;
+}
+
+.loading-dots {
+  @apply flex space-x-1;
+}
+
+.loading-dots > div {
+  @apply w-2 h-2 bg-gray-400 rounded-full animate-bounce;
+}
+
+.loading-dots > div:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.loading-dots > div:nth-child(3) {
+  animation-delay: 0.2s;
+}

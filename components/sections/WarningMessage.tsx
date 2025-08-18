@@ -7,23 +7,24 @@ export const WarningMessage: React.FC = () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      gap: '1rem',
-      marginTop: '2.5rem',
-      padding: '1.5rem 2rem',
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      backdropFilter: 'blur(10px)',
-      borderRadius: borderRadius.xl,
+      gap: 'clamp(0.75rem, 3vw, 1rem)',
+      marginTop: '0',
+      padding: 'clamp(0.5rem, 2vw, 0.75rem) clamp(0.5rem, 2.5vw, 1rem)',
+      backgroundColor: '#0f172a',
+      borderRadius: `0 0 ${borderRadius.xl} ${borderRadius.xl}`,
       width: '100%',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
+      border: 'none',
+      borderTop: 'none',
       boxShadow: shadows.lg,
+      boxSizing: 'border-box',
     }}>
       {/* Ícone de aviso */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '50px',
-        height: '50px',
+        width: 'clamp(40px, 10vw, 50px)',
+        height: 'clamp(40px, 10vw, 50px)',
         backgroundColor: colors.warning,
         borderRadius: '50%',
         boxShadow: shadows.md,
@@ -31,7 +32,7 @@ export const WarningMessage: React.FC = () => {
       }}>
         <span style={{
           color: colors.white,
-          fontSize: '1.5rem',
+          fontSize: 'clamp(1.25rem, 4vw, 1.5rem)',
           fontWeight: 'bold',
         }}>
           ⚠️
@@ -40,15 +41,15 @@ export const WarningMessage: React.FC = () => {
       
       {/* Texto do aviso */}
       <div style={{ flex: 1 }}>
-        <p style={{
-          color: colors.white,
-          fontSize: typography.fontSize.base,
-          margin: 0,
-          fontFamily: typography.fontFamily.primary,
-          fontWeight: typography.fontWeight.medium,
-          lineHeight: 1.5,
-        }}>
-          <strong>Fique atento:</strong> Não solicitamos nenhum tipo de pagamento antecipado para liberação de empréstimo
+                 <p style={{
+           color: colors.white,
+           fontSize: 'clamp(0.875rem, 3vw, 1rem)',
+           margin: 0,
+           fontFamily: typography.fontFamily.primary,
+           fontWeight: typography.fontWeight.medium,
+           lineHeight: 1.5,
+         }}>
+          <strong>Fique atento:</strong> <span style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Não solicitamos nenhum tipo de pagamento antecipado para liberação de empréstimo</span>
         </p>
       </div>
     </div>
