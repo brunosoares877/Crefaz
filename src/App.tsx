@@ -54,22 +54,23 @@ const AppContent: React.FC = () => {
       
       {/* Conteúdo Principal */}
       <main style={{
-        padding: 'clamp(6rem, 15vw, 8rem) clamp(1rem, 4vw, 2rem) clamp(2rem, 8vw, 4rem)',
-        maxWidth: 'clamp(320px, 90vw, 500px)',
+        padding: 'clamp(0.25rem, 1.5vw, 0.75rem) clamp(1rem, 3vw, 1.5rem) clamp(0.25rem, 1.5vw, 0.75rem)',
+        marginTop: 'clamp(2rem, 6vw, 3rem)',
         margin: '0 auto',
         textAlign: 'center',
         position: 'relative',
         zIndex: 1,
+        maxWidth: 'min(95vw, 1264px)',
         width: '100%',
         boxSizing: 'border-box',
       }}>
         {/* Título Principal */}
-        <div style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
+        <div style={{ marginBottom: 'clamp(0.25rem, 1.5vw, 0.75rem)' }}>
           <h1 style={{
-            fontSize: 'clamp(1.5rem, 6vw, 2.5rem)',
+            fontSize: 'clamp(1.25rem, 5vw, 2rem)',
             fontWeight: 'bold',
             color: colors.white,
-            marginBottom: 'clamp(0.25rem, 1vw, 0.5rem)',
+            marginBottom: 'clamp(0.125rem, 1vw, 0.25rem)',
             fontFamily: 'Inter, system-ui, sans-serif',
             lineHeight: 1.2,
             textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
@@ -79,9 +80,9 @@ const AppContent: React.FC = () => {
           </h1>
           
           <p style={{
-            fontSize: 'clamp(0.875rem, 3vw, 1.125rem)',
+            fontSize: 'clamp(0.8125rem, 2.5vw, 1rem)',
             color: 'rgba(255, 255, 255, 0.9)',
-            marginBottom: 'clamp(0.5rem, 2vw, 1rem)',
+            marginBottom: 'clamp(0.25rem, 1.5vw, 0.5rem)',
             fontFamily: 'Inter, system-ui, sans-serif',
             fontWeight: '500',
             textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',

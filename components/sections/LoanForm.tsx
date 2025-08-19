@@ -5,6 +5,8 @@ import { DocumentIcon } from '../ui/DocumentIcon'
 import { WhatsAppIcon } from '../ui/WhatsAppIcon'
 import { leadService, formatarCPF, formatarTelefone, formatarData } from '../../src/services/api'
 import { Notification } from '../ui/Notification'
+import { useNavigation } from '../../src/contexts/NavigationContext'
+import { switchEnvironment } from '../../src/config/api'
 
 interface FormData {
   nome: string
@@ -15,6 +17,7 @@ interface FormData {
 }
 
 export const LoanForm: React.FC = () => {
+  const { navigateTo } = useNavigation()
   const [formData, setFormData] = useState<FormData>({
     nome: '',
     whatsapp: '',
@@ -22,6 +25,8 @@ export const LoanForm: React.FC = () => {
     dataNascimento: '',
     companhiaEnergia: '',
   })
+  const [acceptedPolicy, setAcceptedPolicy] = useState<boolean>(false)
+  const [currentEnvironment, setCurrentEnvironment] = useState<'local' | 'staging' | 'production'>('local')
 
   const [isLoading, setIsLoading] = useState(false)
   const [notification, setNotification] = useState<{
@@ -33,6 +38,12 @@ export const LoanForm: React.FC = () => {
     type: 'info',
     isVisible: false,
   })
+
+  const handleEnvironmentChange = (env: 'local' | 'staging' | 'production') => {
+    setCurrentEnvironment(env)
+    switchEnvironment(env)
+    showNotification(`Ambiente alterado para: ${env.toUpperCase()}`, 'success')
+  }
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     let formattedValue = value
@@ -89,6 +100,10 @@ export const LoanForm: React.FC = () => {
       showNotification('Por favor, selecione sua companhia de energia.', 'error')
       return false
     }
+    if (!acceptedPolicy) {
+      showNotification('É necessário aceitar a política de privacidade e o termo de consentimento.', 'error')
+      return false
+    }
     return true
   }
 
@@ -102,9 +117,21 @@ export const LoanForm: React.FC = () => {
     setIsLoading(true)
 
     try {
-      // Redirecionar para WhatsApp com mensagem personalizada
-      const phoneNumber = '5584994616051' // Número do WhatsApp da empresa
-      const message = `Olá, gostaria de fazer uma simulação.
+      // Primeiro, salvar os dados na API/banco
+      const response = await leadService.cadastrarLead({
+        nome: formData.nome,
+        whatsapp: formData.whatsapp,
+        cpf: formData.cpf,
+        dataNascimento: formData.dataNascimento,
+        companhiaEnergia: formData.companhiaEnergia
+      }, currentEnvironment)
+
+      if (response.success) {
+        showNotification('Dados salvos com sucesso! Redirecionando para WhatsApp...', 'success')
+        
+        // Redirecionar para WhatsApp com mensagem personalizada
+        const phoneNumber = '5584994616051' // Número do WhatsApp da empresa
+        const message = `Olá, gostaria de fazer uma simulação.
 
 *Meus dados:*
 📝 Nome: ${formData.nome}
@@ -113,28 +140,37 @@ export const LoanForm: React.FC = () => {
 📅 Data de Nascimento: ${formData.dataNascimento}
 ⚡ Companhia de Energia: ${formData.companhiaEnergia}`
 
-      const encodedMessage = encodeURIComponent(message)
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
-      
-      // Abrir WhatsApp em nova aba
-      window.open(whatsappUrl, '_blank')
-      
-      showNotification('Redirecionando para o WhatsApp...', 'success')
-      
-      // Limpar formulário após envio
-      setTimeout(() => {
-        setFormData({
-          nome: '',
-          whatsapp: '',
-          cpf: '',
-          dataNascimento: '',
-          companhiaEnergia: '',
-        })
-      }, 1000)
+        const encodedMessage = encodeURIComponent(message)
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
+        
+        // Abrir WhatsApp em nova aba
+        window.open(whatsappUrl, '_blank')
+        
+        // Limpar formulário após envio
+        setTimeout(() => {
+          setFormData({
+            nome: '',
+            whatsapp: '',
+            cpf: '',
+            dataNascimento: '',
+            companhiaEnergia: '',
+          })
+          setAcceptedPolicy(false)
+        }, 1000)
+        
+      } else {
+        showNotification(response.message || 'Erro ao salvar dados. Tente novamente.', 'error')
+      }
       
     } catch (error: any) {
-      console.error('Erro:', error)
-      showNotification('Erro ao abrir WhatsApp. Tente novamente.', 'error')
+      console.error('Erro ao salvar lead:', error)
+      
+      // Se for erro de CPF duplicado, mostrar mensagem específica
+      if (error.message.includes('CPF já cadastrado')) {
+        showNotification('CPF já cadastrado no sistema. Entre em contato conosco.', 'warning')
+      } else {
+        showNotification('Erro ao salvar dados. Tente novamente.', 'error')
+      }
     } finally {
       setIsLoading(false)
     }
@@ -158,7 +194,7 @@ export const LoanForm: React.FC = () => {
     <div style={{
       backgroundColor: colors.white,
       borderRadius: `${borderRadius['2xl']} ${borderRadius['2xl']} 0 0`,
-      padding: 'clamp(1.5rem, 5vw, 2.5rem)',
+      padding: 'clamp(0.75rem, 2.5vw, 1.25rem)',
       boxShadow: shadows['2xl'],
       width: '100%',
       margin: '0 auto',
@@ -179,12 +215,74 @@ export const LoanForm: React.FC = () => {
         opacity: 0.3,
       }} />
 
+      {/* Seletor de Ambiente */}
+      <div style={{
+        display: 'flex',
+        gap: '0.5rem',
+        marginBottom: 'clamp(0.75rem, 2vw, 1rem)',
+        justifyContent: 'center',
+        flexWrap: 'wrap'
+      }}>
+        <button
+          type="button"
+          onClick={() => handleEnvironmentChange('local')}
+          style={{
+            padding: '0.5rem 1rem',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '0.8rem',
+            fontWeight: '500',
+            backgroundColor: currentEnvironment === 'local' ? colors.primary[600] : colors.gray[200],
+            color: currentEnvironment === 'local' ? 'white' : colors.gray[700],
+            transition: 'all 0.3s ease'
+          }}
+        >
+          🏠 Local
+        </button>
+        <button
+          type="button"
+          onClick={() => handleEnvironmentChange('staging')}
+          style={{
+            padding: '0.5rem 1rem',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '0.8rem',
+            fontWeight: '500',
+            backgroundColor: currentEnvironment === 'staging' ? colors.warning[600] : colors.gray[200],
+            color: currentEnvironment === 'staging' ? 'white' : colors.gray[700],
+            transition: 'all 0.3s ease'
+          }}
+        >
+          🧪 Staging
+        </button>
+        <button
+          type="button"
+          onClick={() => handleEnvironmentChange('production')}
+          style={{
+            padding: '0.5rem 1rem',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '0.8rem',
+            fontWeight: '500',
+            backgroundColor: currentEnvironment === 'production' ? colors.success[600] : colors.gray[200],
+            color: currentEnvironment === 'production' ? 'white' : colors.gray[700],
+            transition: 'all 0.3s ease'
+          }}
+        >
+          🚀 Produção
+        </button>
+      </div>
+
       <form onSubmit={handleSubmit} style={{ position: 'relative', zIndex: 1 }}>
+        {/* Linha 1: Nome, CPF, Data de nascimento */}
         <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 'clamp(1rem, 3vw, 1.5rem)',
-          marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+          marginBottom: 'clamp(0.75rem, 2vw, 1rem)',
         }}>
           {/* Nome */}
           <div>
@@ -192,7 +290,7 @@ export const LoanForm: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               gap: 'clamp(0.25rem, 1vw, 0.5rem)',
-              marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+              marginBottom: 'clamp(0.125rem, 0.75vw, 0.375rem)',
               fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
               fontWeight: typography.fontWeight.semibold,
               color: colors.gray[700],
@@ -207,7 +305,7 @@ export const LoanForm: React.FC = () => {
               onChange={(e) => handleInputChange('nome', e.target.value)}
               style={{
                 width: '100%',
-                padding: 'clamp(0.75rem, 3vw, 1rem)',
+                padding: 'clamp(0.5rem, 2.5vw, 0.75rem)',
                 border: `2px solid ${colors.gray[200]}`,
                 borderRadius: borderRadius.lg,
                 fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
@@ -225,7 +323,7 @@ export const LoanForm: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               gap: 'clamp(0.25rem, 1vw, 0.5rem)',
-              marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+              marginBottom: 'clamp(0.125rem, 0.75vw, 0.375rem)',
               fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
               fontWeight: typography.fontWeight.semibold,
               color: colors.gray[700],
@@ -235,12 +333,12 @@ export const LoanForm: React.FC = () => {
             </label>
             <input
               type="text"
-              placeholder="017.102.156-55"
+              placeholder="000.000.000-00"
               value={formData.cpf}
               onChange={(e) => handleInputChange('cpf', e.target.value)}
               style={{
                 width: '100%',
-                padding: 'clamp(0.75rem, 3vw, 1rem)',
+                padding: 'clamp(0.5rem, 2.5vw, 0.75rem)',
                 border: `2px solid ${colors.gray[200]}`,
                 borderRadius: borderRadius.lg,
                 fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
@@ -258,7 +356,7 @@ export const LoanForm: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               gap: 'clamp(0.25rem, 1vw, 0.5rem)',
-              marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+              marginBottom: 'clamp(0.125rem, 0.75vw, 0.375rem)',
               fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
               fontWeight: typography.fontWeight.semibold,
               color: colors.gray[700],
@@ -268,12 +366,12 @@ export const LoanForm: React.FC = () => {
             </label>
             <input
               type="text"
-              placeholder="09/09/1999"
+              placeholder="00/00/0000"
               value={formData.dataNascimento}
               onChange={(e) => handleInputChange('dataNascimento', e.target.value)}
               style={{
                 width: '100%',
-                padding: 'clamp(0.75rem, 3vw, 1rem)',
+                padding: 'clamp(0.5rem, 2.5vw, 0.75rem)',
                 border: `2px solid ${colors.gray[200]}`,
                 borderRadius: borderRadius.lg,
                 fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
@@ -285,13 +383,22 @@ export const LoanForm: React.FC = () => {
             />
           </div>
 
+        </div>
+
+        {/* Linha 2: WhatsApp e Companhia de Energia */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gap: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+          marginBottom: 'clamp(0.75rem, 2vw, 1rem)',
+        }}>
           {/* WhatsApp */}
           <div>
             <label style={{
               display: 'flex',
               alignItems: 'center',
               gap: 'clamp(0.25rem, 1vw, 0.5rem)',
-              marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+              marginBottom: 'clamp(0.125rem, 0.75vw, 0.375rem)',
               fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
               fontWeight: typography.fontWeight.semibold,
               color: colors.gray[700],
@@ -306,7 +413,7 @@ export const LoanForm: React.FC = () => {
               onChange={(e) => handleInputChange('whatsapp', e.target.value)}
               style={{
                 width: '100%',
-                padding: 'clamp(0.75rem, 3vw, 1rem)',
+                padding: 'clamp(0.5rem, 2.5vw, 0.75rem)',
                 border: `2px solid ${colors.gray[200]}`,
                 borderRadius: borderRadius.lg,
                 fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
@@ -324,7 +431,7 @@ export const LoanForm: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               gap: 'clamp(0.25rem, 1vw, 0.5rem)',
-              marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+              marginBottom: 'clamp(0.125rem, 0.75vw, 0.375rem)',
               fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
               fontWeight: typography.fontWeight.semibold,
               color: colors.gray[700],
@@ -337,7 +444,7 @@ export const LoanForm: React.FC = () => {
               onChange={(e) => handleInputChange('companhiaEnergia', e.target.value)}
               style={{
                 width: '100%',
-                padding: 'clamp(0.75rem, 3vw, 1rem)',
+                padding: 'clamp(0.5rem, 2.5vw, 0.75rem)',
                 border: `2px solid ${colors.gray[200]}`,
                 borderRadius: borderRadius.lg,
                 fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
@@ -357,14 +464,36 @@ export const LoanForm: React.FC = () => {
           </div>
         </div>
 
+        {/* Checkbox de aceite */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          marginBottom: 'clamp(0.5rem, 1.5vw, 0.75rem)',
+          color: colors.gray[800],
+          fontFamily: typography.fontFamily.primary,
+          fontSize: 'clamp(0.875rem, 2.5vw, 1rem)'
+        }}>
+          <input
+            id="consent"
+            type="checkbox"
+            checked={acceptedPolicy}
+            onChange={(e) => setAcceptedPolicy(e.target.checked)}
+            style={{ width: '1rem', height: '1rem' }}
+          />
+          <label htmlFor="consent" style={{ cursor: 'pointer' }}>
+            Li e concordo com a <a onClick={() => navigateTo('privacy')} style={{ color: colors.info, textDecoration: 'underline', cursor: 'pointer' }}>política de privacidade</a> e o <a onClick={() => navigateTo('terms')} style={{ color: colors.info, textDecoration: 'underline', cursor: 'pointer' }}>termo de consentimento</a>.
+          </label>
+        </div>
+
         {/* Botão de Simulação */}
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          disabled={isLoading}
-          style={{ marginBottom: '1.5rem' }}
-        >
+        <div style={{ marginBottom: '0.5rem' }}>
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            disabled={isLoading}
+          >
           {isLoading ? (
             <>
               <div style={{
@@ -399,11 +528,12 @@ export const LoanForm: React.FC = () => {
                 textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
                 fontWeight: 'bold',
               }}>
-                Simular no WhatsApp
+                Simular Valor Liberado
               </span>
             </>
           )}
         </Button>
+        </div>
 
         {/* Texto de conversão otimizado */}
         <p style={{

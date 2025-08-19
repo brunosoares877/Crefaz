@@ -13,6 +13,32 @@ export const Footer: React.FC = () => {
       padding: 'clamp(2rem, 6vw, 3rem) clamp(1rem, 4vw, 2rem)',
       marginTop: 'clamp(2rem, 8vw, 4rem)',
     }}>
+      {/* Aviso legal acima de todas as colunas */}
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+      }}>
+        <div style={{
+          fontSize: typography.fontSize.xs,
+          lineHeight: typography.lineHeight.relaxed,
+          fontFamily: typography.fontFamily.primary,
+          marginBottom: '2rem',
+        }}>
+          <p style={{ marginBottom: '0.5rem' }}>
+            A SOLUTION MAIS CORRESPONDENTE BANCARIO LTDA atua como correspondente bancário, 
+            oferecendo serviços de intermediação para produtos financeiros. As taxas de juros e 
+            condições são definidas pelas instituições financeiras parceiras.
+          </p>
+          <p style={{ marginBottom: '0.5rem' }}>
+            Este site não representa uma oferta de crédito. A aprovação está sujeita à análise 
+            de crédito e documentação. Consulte as condições completas antes de contratar.
+          </p>
+          <p style={{ marginBottom: '0.5rem' }}>
+            ATENÇÃO: Não solicitamos qualquer tipo de pagamento, taxa ou depósito em nenhuma etapa do processo (antes ou depois da aprovação). 
+            Desconfie de qualquer pedido de valores.
+          </p>
+        </div>
+      </div>
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
@@ -20,7 +46,7 @@ export const Footer: React.FC = () => {
         gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
         gap: 'clamp(1.5rem, 5vw, 3rem)',
       }}>
-        {/* Coluna 1 - Informações da Empresa + Contatos */}
+        {/* Coluna 1 - Informações da Empresa */}
         <div>
           <h3 style={{
             fontSize: 'clamp(1rem, 3.5vw, 1.125rem)',
@@ -38,13 +64,14 @@ export const Footer: React.FC = () => {
           }}>
             CNPJ 29.324.455/0001-44
           </p>
+
           
           <p style={{
             fontSize: typography.fontSize.sm,
             marginBottom: '1rem',
             fontFamily: typography.fontFamily.primary,
           }}>
-            Av Brigadeiro Everaldo Breves 152 Loja 127
+            Av Brigadeiro Everaldo Breves 152, Loja 127
           </p>
           
           <p style={{
@@ -55,27 +82,10 @@ export const Footer: React.FC = () => {
             Todos os direitos reservados a Solution © 2025
           </p>
           
-          <div style={{
-            fontSize: typography.fontSize.xs,
-            lineHeight: typography.lineHeight.relaxed,
-            fontFamily: typography.fontFamily.primary,
-            marginBottom: '2rem',
-          }}>
-            <p style={{ marginBottom: '0.5rem' }}>
-              A SOLUTION MAIS CORRESPONDENTE BANCARIO LTDA atua como correspondente bancário, 
-              oferecendo serviços de intermediação para produtos financeiros. As taxas de juros e 
-              condições são definidas pelas instituições financeiras parceiras.
-            </p>
-            <p style={{ marginBottom: '0.5rem' }}>
-              Este site não representa uma oferta de crédito. A aprovação está sujeita à análise 
-              de crédito e documentação. Consulte as condições completas antes de contratar.
-            </p>
-            <p style={{ marginBottom: '0.5rem' }}>
-              ATENÇÃO: Nunca solicitamos pagamentos antecipados para liberação de crédito. 
-              Desconfie de propostas que pedem dinheiro antes da aprovação.
-            </p>
-          </div>
+        </div>
 
+        {/* Coluna 2 - Contatos */}
+        <div>
           <h3 style={{
             fontSize: 'clamp(1rem, 3.5vw, 1.125rem)',
             fontWeight: typography.fontWeight.bold,
@@ -84,7 +94,19 @@ export const Footer: React.FC = () => {
           }}>
             CONTATOS
           </h3>
-          
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            marginBottom: '1rem',
+            fontSize: typography.fontSize.base,
+            fontFamily: typography.fontFamily.primary,
+          }}>
+            <span>📧</span>
+            <span>sac@solutionpromotora.com.br</span>
+          </div>
+
           <div 
             onClick={() => {
               const phoneNumber = '5584994616051'
@@ -117,7 +139,7 @@ export const Footer: React.FC = () => {
             </div>
             <span>(84) 99461-6051</span>
           </div>
-          
+
           <div style={{
             display: 'flex',
             alignItems: 'center',
@@ -129,19 +151,7 @@ export const Footer: React.FC = () => {
             <span>📞</span>
             <span>(84) 2030-2584</span>
           </div>
-          
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            marginBottom: '1rem',
-            fontSize: typography.fontSize.base,
-            fontFamily: typography.fontFamily.primary,
-          }}>
-            <span>📧</span>
-            <span>sac@solutionpromotora.com.br</span>
-          </div>
-          
+
           <div style={{ 
             display: 'flex', 
             flexDirection: 'column', 
@@ -151,7 +161,7 @@ export const Footer: React.FC = () => {
             {[
               { text: 'Política de Privacidade', icon: '🔒', action: () => navigateTo('privacy') },
               { text: 'Termos de Uso', icon: '📋', action: () => navigateTo('terms') },
-              { text: 'Reclame Aqui', icon: '📢', action: null },
+              { text: 'Reclame Aqui', icon: '📢', action: () => window.open('https://www.reclameaqui.com.br/', '_blank') },
             ].map((item, index) => (
               <div key={index} style={{
                 display: 'flex',

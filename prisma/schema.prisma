@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Lead {
+  id                String   @id @default(cuid())
+  nome              String
+  whatsapp          String
+  cpf               String   @unique
+  dataNascimento    String
+  companhiaEnergia  String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  status            String   @default("PENDENTE") // PENDENTE, CONTATADO, CONVERTIDO, DESCARTADO
+  
+  // Campos adicionais para rastreamento
+  ipAddress         String?
+  userAgent         String?
+  source            String   @default("FORMULARIO_WEB")
+  
+  @@map("leads")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("USER") // ADMIN, USER
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("users")
+}

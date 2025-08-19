@@ -3,14 +3,14 @@ import React from 'react'
 export const Header: React.FC = () => {
   return (
     <header style={{
-      position: 'absolute',
+      position: 'fixed',
       top: 'clamp(0.5rem, 2vw, 1rem)',
       left: '50%',
       transform: 'translateX(-50%)',
       zIndex: 10,
       width: '100%',
       maxWidth: '500px',
-      padding: '0 1rem',
+      padding: 'clamp(0.25rem, 1vw, 0.375rem) clamp(0.5rem, 2vw, 0.75rem)',
       boxSizing: 'border-box',
     }}>
       <div style={{

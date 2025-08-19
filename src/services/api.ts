@@ -1,13 +1,23 @@
 import axios from 'axios'
-import { API_CONFIG } from '../config/api'
-import { getApiUrl, getEnvironmentConfig } from '../config/environments'
+import { getEnvironmentConfig, getEndpoint } from '../config/environments'
 
 // Configuração base do Axios
-const api = axios.create({
-  baseURL: getApiUrl(),
-  timeout: getEnvironmentConfig().timeout,
-  headers: API_CONFIG.DEFAULT_HEADERS,
-})
+const createApiInstance = (environment: string = 'local') => {
+  const config = getEnvironmentConfig(environment)
+  
+  return axios.create({
+    baseURL: config.url,
+    timeout: config.timeout,
+    headers: {
+      'Content-Type': 'application/json',
+      // Adicionar API key se necessário
+      ...(config.apiKey && { 'Authorization': `Bearer ${config.apiKey}` })
+    },
+  })
+}
+
+// Instância padrão (local)
+const api = createApiInstance('local')
 
 // Interceptor para adicionar token de autenticação (se necessário)
 api.interceptors.request.use(
@@ -27,7 +37,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const envConfig = getEnvironmentConfig()
+    const envConfig = getEnvironmentConfig('local')
     if (envConfig.enableLogs) {
       console.error('Erro na requisição:', error)
     }
@@ -54,9 +64,14 @@ export interface ApiResponse {
 // Serviço para cadastro de leads
 export const leadService = {
   // Cadastrar novo lead
-  async cadastrarLead(data: FormData): Promise<ApiResponse> {
+  async cadastrarLead(data: FormData, environment: string = 'local'): Promise<ApiResponse> {
     try {
-      const response = await api.post(API_CONFIG.ENDPOINTS.LEADS, data)
+      const apiInstance = createApiInstance(environment)
+      const endpoint = getEnvironmentConfig(environment).endpoints.leads
+      
+      console.log(`🌐 Enviando lead para: ${getEnvironmentConfig(environment).url}${endpoint}`)
+      
+      const response = await apiInstance.post(endpoint, data)
       return response.data
     } catch (error: any) {
       console.error('Erro na API externa:', error.message)
@@ -65,9 +80,12 @@ export const leadService = {
   },
 
   // Buscar leads (se necessário)
-  async buscarLeads(): Promise<ApiResponse> {
+  async buscarLeads(environment: string = 'local'): Promise<ApiResponse> {
     try {
-      const response = await api.get(API_CONFIG.ENDPOINTS.LEADS)
+      const apiInstance = createApiInstance(environment)
+      const endpoint = getEnvironmentConfig(environment).endpoints.leads
+      
+      const response = await apiInstance.get(endpoint)
       return response.data
     } catch (error: any) {
       console.error('Erro na API externa:', error.message)
@@ -76,9 +94,12 @@ export const leadService = {
   },
 
   // Validar CPF (se necessário)
-  async validarCPF(cpf: string): Promise<ApiResponse> {
+  async validarCPF(cpf: string, environment: string = 'local'): Promise<ApiResponse> {
     try {
-      const response = await api.post(API_CONFIG.ENDPOINTS.VALIDAR_CPF, { cpf })
+      const apiInstance = createApiInstance(environment)
+      const endpoint = '/validar-cpf' // Endpoint padrão
+      
+      const response = await apiInstance.post(endpoint, { cpf })
       return response.data
     } catch (error: any) {
       console.error('Erro na API externa:', error.message)
