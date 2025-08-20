@@ -53,8 +53,8 @@ export const switchEnvironment = (env: 'local' | 'staging' | 'production') => {
   }
   
   API_CONFIG.BASE_URL = urls[env]
-  console.log(`🔄 Ambiente alterado para: ${env.toUpperCase()}`)
-  console.log(`🌐 URL: ${API_CONFIG.BASE_URL}`)
+      console.log(`Ambiente alterado para: ${env.toUpperCase()}`)
+      console.log(`URL: ${API_CONFIG.BASE_URL}`)
   
   return API_CONFIG.BASE_URL
 }

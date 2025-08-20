@@ -1,18 +1,18 @@
-# 🚀 Sistema de Captação de Leads - Empréstimo Consignado
+# Sistema de Captação de Leads - Empréstimo Consignado
 
 Sistema completo para captação e gerenciamento de leads para empréstimo consignado, com integração multi-ambiente e painel administrativo.
 
 ## ✨ **Funcionalidades**
 
-- **📝 Formulário de Captação** - Interface responsiva para coleta de dados
-- **🌐 Multi-Ambiente** - Suporte a Local, Staging e Produção
-- **📊 Painel Administrativo** - Gerenciamento completo de leads
-- **💾 Banco de Dados** - SQLite com Prisma ORM
-- **🔒 Validações** - CPF duplicado, campos obrigatórios
-- **📤 Exportação** - CSV dos dados coletados
-- **📱 Responsivo** - Funciona em todos os dispositivos
+- **Formulário de Captação** - Interface responsiva para coleta de dados
+- **Multi-Ambiente** - Suporte a Local, Staging e Produção
+- **Painel Administrativo** - Gerenciamento completo de leads
+- **Banco de Dados** - SQLite com Prisma ORM
+- **Validações** - CPF duplicado, campos obrigatórios
+- **Exportação** - CSV dos dados coletados
+- **Responsivo** - Funciona em todos os dispositivos
 
-## 🏗️ **Arquitetura**
+## Arquitetura
 
 ```
 ├── Frontend (React + Vite)
@@ -32,7 +32,7 @@ Sistema completo para captação e gerenciamento de leads para empréstimo consi
     └── Exportação de dados
 ```
 
-## 🚀 **Instalação e Configuração**
+## Instalação e Configuração
 
 ### **Pré-requisitos**
 - Node.js 18+ 
@@ -81,7 +81,7 @@ Health Check: http://localhost:3001/health
 npm run server:dev
 ```
 
-## 🌍 **Ambientes Disponíveis**
+## Ambientes Disponíveis
 
 | Ambiente | URL | Descrição |
 |----------|-----|-----------|
@@ -89,7 +89,7 @@ npm run server:dev
 | **Staging** | https://8f2cf2e0-f3f6-472f-808e-e9006a830090.mock.pstmn.io | Testes e homologação |
 | **Produção** | https://86feaeec-b8ca-4c9c-acb4-bb301e4165f1.mock.pstmn.io | Ambiente de produção |
 
-## 📊 **API Endpoints**
+## API Endpoints
 
 ### **Health Check**
 ```
@@ -133,7 +133,7 @@ prisma/                 # Schema e migrações
 admin-panel.html        # Painel administrativo
 ```
 
-## 🧪 **Testes**
+## Testes
 
 ### **Testar API Local**
 ```bash
@@ -150,13 +150,13 @@ node test-external-apis.js
 Acesse: http://localhost:3001/admin-panel.html
 
 **Funcionalidades:**
-- 📊 Estatísticas dos leads
-- 🔍 Busca e filtros
-- 📝 Atualização de status
-- 📥 Exportação CSV
-- 🌍 Seletor de ambiente
+- Estatísticas dos leads
+- Busca e filtros
+- Atualização de status
+- Exportação CSV
+- Seletor de ambiente
 
-## 🔧 **Comandos Disponíveis**
+## Comandos Disponíveis
 
 ```bash
 # Desenvolvimento
@@ -175,7 +175,7 @@ npm run build            # Build de produção
 npm run preview          # Preview do build
 ```
 
-## 📋 **Status dos Leads**
+## Status dos Leads
 
 - **PENDENTE** - Lead recém cadastrado
 - **CONTATADO** - Lead em processo de contato
@@ -189,7 +189,7 @@ npm run preview          # Preview do build
 - Rate limiting (configurável)
 - Headers de segurança
 
-## 🚀 **Deploy**
+## Deploy
 
 ### **Frontend (Vercel/Netlify)**
 ```bash
@@ -215,7 +215,7 @@ npm run server
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
-## 📞 **Suporte**
+## Suporte
 
 Para dúvidas ou suporte, entre em contato através dos canais disponíveis no projeto.
 

@@ -110,29 +110,7 @@
             background: #5a6268;
         }
         
-        .environment-selector {
-            display: flex;
-            gap: 8px;
-        }
         
-        .btn-env {
-            padding: 8px 16px;
-            font-size: 0.8rem;
-            background: #e9ecef;
-            color: #6c757d;
-            border: 2px solid transparent;
-        }
-        
-        .btn-env.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        .btn-env:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
         
         .search-box {
             flex: 1;
@@ -245,7 +223,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📊 Painel de Leads</h1>
+            <h1>Painel de Leads</h1>
             <p>Gerencie todos os leads cadastrados no sistema</p>
         </div>
         
@@ -272,14 +250,10 @@
             </div>
             
             <div class="controls">
-                <button class="btn btn-primary" onclick="refreshLeads()">🔄 Atualizar</button>
-                <button class="btn btn-secondary" onclick="exportCSV()">📥 Exportar CSV</button>
-                <div class="environment-selector">
-                    <button class="btn btn-env" onclick="switchEnvironment('local')" id="btn-local">🏠 Local</button>
-                    <button class="btn btn-env" onclick="switchEnvironment('staging')" id="btn-staging">🧪 Staging</button>
-                    <button class="btn btn-env" onclick="switchEnvironment('production')" id="btn-production">🚀 Produção</button>
-                </div>
-                <input type="text" class="search-box" id="searchInput" placeholder="🔍 Buscar por nome, CPF ou WhatsApp..." onkeyup="filterLeads()">
+                <button class="btn btn-primary" onclick="refreshLeads()">Atualizar</button>
+                <button class="btn btn-secondary" onclick="exportCSV()">Exportar CSV</button>
+                
+                <input type="text" class="search-box" id="searchInput" placeholder="Buscar por nome, CPF ou WhatsApp..." onkeyup="filterLeads()">
             </div>
             
             <div id="leadsContainer">
@@ -289,68 +263,39 @@
     </div>
 
     <script>
-        let allLeads = [];
-        let currentEnvironment = 'local';
+                 let allLeads = [];
         
-        // URLs dos ambientes
-        const environmentUrls = {
-            local: 'http://localhost:3001',
-            staging: 'https://8f2cf2e0-f3f6-472f-808e-e9006a830090.mock.pstmn.io',
-            production: 'https://86feaeec-b8ca-4c9c-acb4-bb301e4165f1.mock.pstmn.io'
-        };
+                 // Carregar leads ao iniciar
+         document.addEventListener('DOMContentLoaded', function() {
+             refreshLeads();
+         });
         
-        // Carregar leads ao iniciar
-        document.addEventListener('DOMContentLoaded', function() {
-            updateEnvironmentButtons();
-            refreshLeads();
-        });
-        
-        function switchEnvironment(env) {
-            currentEnvironment = env;
-            updateEnvironmentButtons();
-            showMessage(`Ambiente alterado para: ${env.toUpperCase()}`, 'success');
-            refreshLeads();
-        }
-        
-        function updateEnvironmentButtons() {
-            // Remover classe active de todos os botões
-            document.querySelectorAll('.btn-env').forEach(btn => btn.classList.remove('active'));
-            
-            // Adicionar classe active ao botão atual
-            const currentBtn = document.getElementById(`btn-${currentEnvironment}`);
-            if (currentBtn) {
-                currentBtn.classList.add('active');
-            }
-        }
-        
-        async function refreshLeads() {
-            try {
-                showMessage('Carregando leads...', 'info');
-                
-                const baseUrl = environmentUrls[currentEnvironment];
-                const endpoint = currentEnvironment === 'local' ? '/api/leads' : '/leads';
-                const url = `${baseUrl}${endpoint}`;
-                
-                console.log(`🌐 Fazendo requisição para: ${url}`);
-                
-                const response = await fetch(url);
-                const data = await response.json();
-                
-                if (data.success) {
-                    allLeads = data.data;
-                    displayLeads(allLeads);
-                    updateStats(allLeads);
-                    showMessage(`${allLeads.length} leads carregados com sucesso!`, 'success');
-                } else {
-                    throw new Error(data.message);
-                }
-                
-            } catch (error) {
-                console.error('Erro ao carregar leads:', error);
-                showMessage('Erro ao carregar leads: ' + error.message, 'error');
-                document.getElementById('leadsContainer').innerHTML = '<div class="error">Erro ao carregar leads. Verifique se o servidor está rodando.</div>';
-            }
-        }
+                 async function refreshLeads() {
+             try {
+                 showMessage('Carregando leads...', 'info');
+                 
+                 const url = 'http://localhost:3001/api/leads';
+                 
+                 console.log(`Fazendo requisição para: ${url}`);
+                 
+                 const response = await fetch(url);
+                 const data = await response.json();
+                 
+                 if (data.success) {
+                     allLeads = data.data;
+                     displayLeads(allLeads);
+                     updateStats(allLeads);
+                     showMessage(`${allLeads.length} leads carregados com sucesso!`, 'success');
+                 } else {
+                     throw new Error(data.message);
+                 }
+                 
+             } catch (error) {
+                 console.error('Erro ao carregar leads:', error);
+                 showMessage('Erro ao carregar leads: ' + error.message, 'error');
+                 document.getElementById('leadsContainer').innerHTML = '<div class="error">Erro ao carregar leads. Verifique se o servidor está rodando.</div>';
+             }
+         }
         
         function displayLeads(leads) {
             const container = document.getElementById('leadsContainer');

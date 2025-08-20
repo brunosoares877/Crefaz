@@ -6,7 +6,7 @@ import { WhatsAppIcon } from '../ui/WhatsAppIcon'
 import { leadService, formatarCPF, formatarTelefone, formatarData } from '../../src/services/api'
 import { Notification } from '../ui/Notification'
 import { useNavigation } from '../../src/contexts/NavigationContext'
-import { switchEnvironment } from '../../src/config/api'
+
 
 interface FormData {
   nome: string
@@ -26,7 +26,12 @@ export const LoanForm: React.FC = () => {
     companhiaEnergia: '',
   })
   const [acceptedPolicy, setAcceptedPolicy] = useState<boolean>(false)
-  const [currentEnvironment, setCurrentEnvironment] = useState<'local' | 'staging' | 'production'>('local')
+  const [currentEnvironment, setCurrentEnvironment] = useState<'local' | 'crefaz'>('local')
+
+  const handleEnvironmentChange = (env: 'local' | 'crefaz') => {
+    setCurrentEnvironment(env)
+    showNotification(`Ambiente alterado para: ${env.toUpperCase()}`, 'success')
+  }
 
   const [isLoading, setIsLoading] = useState(false)
   const [notification, setNotification] = useState<{
@@ -39,11 +44,7 @@ export const LoanForm: React.FC = () => {
     isVisible: false,
   })
 
-  const handleEnvironmentChange = (env: 'local' | 'staging' | 'production') => {
-    setCurrentEnvironment(env)
-    switchEnvironment(env)
-    showNotification(`Ambiente alterado para: ${env.toUpperCase()}`, 'success')
-  }
+
 
   const handleInputChange = (field: keyof FormData, value: string) => {
     let formattedValue = value
@@ -117,50 +118,82 @@ export const LoanForm: React.FC = () => {
     setIsLoading(true)
 
     try {
-      // Primeiro, salvar os dados na API/banco
-      const response = await leadService.cadastrarLead({
-        nome: formData.nome,
-        whatsapp: formData.whatsapp,
-        cpf: formData.cpf,
-        dataNascimento: formData.dataNascimento,
-        companhiaEnergia: formData.companhiaEnergia
-      }, currentEnvironment)
+      // Enviar dados para o ambiente selecionado
+      if (currentEnvironment === 'crefaz') {
+        const crefazUrl = 'https://8f2cf2e0-f3f6-472f-808e-e9006a830090.mock.pstmn.io/'
+        console.log('Enviando dados para o Crefaz...')
+        console.log('URL do Crefaz:', crefazUrl)
+        // Enviar diretamente para a API do Crefaz (Staging)
+        const crefazResponse = await fetch(crefazUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            nome: formData.nome,
+            whatsapp: formData.whatsapp,
+            cpf: formData.cpf,
+            dataNascimento: formData.dataNascimento,
+            companhiaEnergia: formData.companhiaEnergia
+          })
+        })
 
-      if (response.success) {
-        showNotification('Dados salvos com sucesso! Redirecionando para WhatsApp...', 'success')
+        console.log('Resposta do Crefaz:', crefazResponse.status, crefazResponse.statusText)
         
-        // Redirecionar para WhatsApp com mensagem personalizada
-        const phoneNumber = '5584994616051' // Número do WhatsApp da empresa
-        const message = `Olá, gostaria de fazer uma simulação.
+        if (crefazResponse.ok) {
+          const responseData = await crefazResponse.json()
+          console.log('Dados retornados pelo Crefaz:', responseData)
+          showNotification('Dados enviados para o Crefaz com sucesso! Redirecionando para WhatsApp...', 'success')
+        } else {
+          const errorData = await crefazResponse.text()
+          console.error('Erro do Crefaz:', errorData)
+          throw new Error(`Erro ao enviar para o Crefaz: ${crefazResponse.status}`)
+        }
+      } else {
+        // Enviar para API local
+        const response = await leadService.cadastrarLead({
+          nome: formData.nome,
+          whatsapp: formData.whatsapp,
+          cpf: formData.cpf,
+          dataNascimento: formData.dataNascimento,
+          companhiaEnergia: formData.companhiaEnergia
+        }, 'local')
+
+        if (!response.success) {
+          throw new Error(response.message || 'Erro ao salvar dados')
+        }
+      }
+
+      // Se chegou até aqui, os dados foram enviados com sucesso
+      
+      // Redirecionar para WhatsApp com mensagem personalizada
+      const phoneNumber = '5584994616051' // Número do WhatsApp da empresa
+      const message = `Olá, gostaria de fazer uma simulação.
 
 *Meus dados:*
-📝 Nome: ${formData.nome}
+Nome: ${formData.nome}
 📱 WhatsApp: ${formData.whatsapp}
 🆔 CPF: ${formData.cpf}
 📅 Data de Nascimento: ${formData.dataNascimento}
 ⚡ Companhia de Energia: ${formData.companhiaEnergia}`
 
-        const encodedMessage = encodeURIComponent(message)
-        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
-        
-        // Abrir WhatsApp em nova aba
-        window.open(whatsappUrl, '_blank')
-        
-        // Limpar formulário após envio
-        setTimeout(() => {
-          setFormData({
-            nome: '',
-            whatsapp: '',
-            cpf: '',
-            dataNascimento: '',
-            companhiaEnergia: '',
-          })
-          setAcceptedPolicy(false)
-        }, 1000)
-        
-      } else {
-        showNotification(response.message || 'Erro ao salvar dados. Tente novamente.', 'error')
-      }
+      const encodedMessage = encodeURIComponent(message)
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
+      
+      // Abrir WhatsApp em nova aba
+      window.open(whatsappUrl, '_blank')
+      
+      // Limpar formulário após envio
+      setTimeout(() => {
+        setFormData({
+          nome: '',
+          whatsapp: '',
+          cpf: '',
+          dataNascimento: '',
+          companhiaEnergia: '',
+        })
+        setAcceptedPolicy(false)
+      }, 1000)
       
     } catch (error: any) {
       console.error('Erro ao salvar lead:', error)
@@ -225,7 +258,7 @@ export const LoanForm: React.FC = () => {
       }}>
         <button
           type="button"
-          onClick={() => handleEnvironmentChange('local')}
+          onClick={() => setCurrentEnvironment('local')}
           style={{
             padding: '0.5rem 1rem',
             border: 'none',
@@ -238,11 +271,11 @@ export const LoanForm: React.FC = () => {
             transition: 'all 0.3s ease'
           }}
         >
-          🏠 Local
+          Local
         </button>
         <button
           type="button"
-          onClick={() => handleEnvironmentChange('staging')}
+          onClick={() => setCurrentEnvironment('crefaz')}
           style={{
             padding: '0.5rem 1rem',
             border: 'none',
@@ -250,31 +283,16 @@ export const LoanForm: React.FC = () => {
             cursor: 'pointer',
             fontSize: '0.8rem',
             fontWeight: '500',
-            backgroundColor: currentEnvironment === 'staging' ? colors.warning[600] : colors.gray[200],
-            color: currentEnvironment === 'staging' ? 'white' : colors.gray[700],
+            backgroundColor: currentEnvironment === 'crefaz' ? colors.primary[600] : colors.gray[200],
+            color: currentEnvironment === 'crefaz' ? 'white' : colors.gray[700],
             transition: 'all 0.3s ease'
           }}
         >
-          🧪 Staging
-        </button>
-        <button
-          type="button"
-          onClick={() => handleEnvironmentChange('production')}
-          style={{
-            padding: '0.5rem 1rem',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            fontSize: '0.8rem',
-            fontWeight: '500',
-            backgroundColor: currentEnvironment === 'production' ? colors.success[600] : colors.gray[200],
-            color: currentEnvironment === 'production' ? 'white' : colors.gray[700],
-            transition: 'all 0.3s ease'
-          }}
-        >
-          🚀 Produção
+          Crefaz
         </button>
       </div>
+
+
 
       <form onSubmit={handleSubmit} style={{ position: 'relative', zIndex: 1 }}>
         {/* Linha 1: Nome, CPF, Data de nascimento */}
@@ -544,7 +562,7 @@ export const LoanForm: React.FC = () => {
           fontFamily: typography.fontFamily.primary,
           fontWeight: typography.fontWeight.semibold,
         }}>
-          ✅ Somente o titular da fatura consegue contratar o empréstimo!
+          Somente o titular da fatura consegue contratar o empréstimo!
         </p>
       </form>
 

@@ -67,7 +67,7 @@ app.post('/api/leads', async (req, res) => {
       }
     })
 
-    console.log(`✅ Novo lead cadastrado: ${nome} (${cpf})`)
+    console.log(`Novo lead cadastrado: ${nome} (${cpf})`)
 
     res.status(201).json({
       success: true,
@@ -80,7 +80,7 @@ app.post('/api/leads', async (req, res) => {
     })
 
   } catch (error) {
-    console.error('❌ Erro ao cadastrar lead:', error)
+    console.error('Erro ao cadastrar lead:', error)
     res.status(500).json({
       success: false,
       message: 'Erro interno do servidor',
@@ -114,7 +114,7 @@ app.get('/api/leads', async (req, res) => {
     })
 
   } catch (error) {
-    console.error('❌ Erro ao buscar leads:', error)
+    console.error('Erro ao buscar leads:', error)
     res.status(500).json({
       success: false,
       message: 'Erro interno do servidor'
@@ -149,7 +149,7 @@ app.patch('/api/leads/:id/status', async (req, res) => {
     })
 
   } catch (error) {
-    console.error('❌ Erro ao atualizar status:', error)
+    console.error('Erro ao atualizar status:', error)
     res.status(500).json({
       success: false,
       message: 'Erro interno do servidor'
@@ -159,7 +159,7 @@ app.patch('/api/leads/:id/status', async (req, res) => {
 
 // Middleware de tratamento de erros
 app.use((error, req, res, next) => {
-  console.error('❌ Erro não tratado:', error)
+  console.error('Erro não tratado:', error)
   res.status(500).json({
     success: false,
     message: 'Erro interno do servidor'
@@ -179,24 +179,24 @@ async function startServer() {
   try {
     // Conectar ao banco
     await prisma.$connect()
-    console.log('✅ Conectado ao banco de dados')
+    console.log('Conectado ao banco de dados')
 
     // Iniciar servidor
     app.listen(PORT, () => {
-      console.log(`🚀 Servidor rodando na porta ${PORT}`)
-      console.log(`📊 Health check: http://localhost:${PORT}/health`)
-      console.log(`📝 API Leads: http://localhost:${PORT}/api/leads`)
+      console.log(`Servidor rodando na porta ${PORT}`)
+      console.log(`Health check: http://localhost:${PORT}/health`)
+      console.log(`API Leads: http://localhost:${PORT}/api/leads`)
     })
 
   } catch (error) {
-    console.error('❌ Erro ao iniciar servidor:', error)
+    console.error('Erro ao iniciar servidor:', error)
     process.exit(1)
   }
 }
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
-  console.log('\n🛑 Desligando servidor...')
+  console.log('\nDesligando servidor...')
   await prisma.$disconnect()
   process.exit(0)
 })

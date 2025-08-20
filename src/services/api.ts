@@ -66,16 +66,25 @@ export const leadService = {
   // Cadastrar novo lead
   async cadastrarLead(data: FormData, environment: string = 'local'): Promise<ApiResponse> {
     try {
-      const apiInstance = createApiInstance(environment)
-      const endpoint = getEnvironmentConfig(environment).endpoints.leads
+      const url = 'http://localhost:3001/api/leads'
+      console.log(`Enviando lead para: ${url}`)
       
-      console.log(`🌐 Enviando lead para: ${getEnvironmentConfig(environment).url}${endpoint}`)
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      })
       
-      const response = await apiInstance.post(endpoint, data)
-      return response.data
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
+      return await response.json()
     } catch (error: any) {
-      console.error('Erro na API externa:', error.message)
-      throw new Error(error.response?.data?.message || 'Erro ao cadastrar lead')
+      console.error('Erro na API:', error.message)
+      throw new Error('Erro ao cadastrar lead')
     }
   },
 

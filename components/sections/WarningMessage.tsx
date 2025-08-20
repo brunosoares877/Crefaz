@@ -35,7 +35,7 @@ export const WarningMessage: React.FC = () => {
           fontSize: 'clamp(1.25rem, 4vw, 1.5rem)',
           fontWeight: 'bold',
         }}>
-          ⚠️
+          !
         </span>
       </div>
       

@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Iniciando seed do banco de dados...');
+  console.log('Iniciando seed do banco de dados...');
 
   // Criar usuário admin padrão
   const adminPassword = await bcrypt.hash('admin123', 12);
@@ -19,7 +19,7 @@ async function main() {
     }
   });
 
-  console.log('✅ Usuário admin criado:', admin.email);
+  console.log('Usuário admin criado:', admin.email);
 
   // Criar usuário de teste
   const userPassword = await bcrypt.hash('user123', 12);
@@ -34,7 +34,7 @@ async function main() {
     }
   });
 
-  console.log('✅ Usuário teste criado:', user.email);
+  console.log('Usuário teste criado:', user.email);
 
   // Criar contas padrão
   const defaultAccounts = [
@@ -78,14 +78,14 @@ async function main() {
     });
   }
 
-  console.log('✅ Contas padrão criadas');
+  console.log('Contas padrão criadas');
 
   // Criar categorias de receita
   const incomeCategories = [
-    { name: 'Salário', color: '#059669', icon: '💰' },
-    { name: 'Freelance', color: '#0d9488', icon: '💼' },
-    { name: 'Investimentos', color: '#7c3aed', icon: '📈' },
-    { name: 'Outros', color: '#1e40af', icon: '➕' }
+    { name: 'Salário', color: '#059669', icon: 'Money' },
+    { name: 'Freelance', color: '#0d9488', icon: 'Work' },
+    { name: 'Investimentos', color: '#7c3aed', icon: 'Chart' },
+    { name: 'Outros', color: '#1e40af', icon: 'Plus' }
   ];
 
   for (const categoryData of incomeCategories) {
@@ -104,14 +104,14 @@ async function main() {
 
   // Criar categorias de despesa
   const expenseCategories = [
-    { name: 'Alimentação', color: '#dc2626', icon: '🍽️' },
-    { name: 'Transporte', color: '#ea580c', icon: '🚗' },
-    { name: 'Moradia', color: '#1e40af', icon: '🏠' },
-    { name: 'Saúde', color: '#059669', icon: '🏥' },
-    { name: 'Educação', color: '#7c3aed', icon: '📚' },
-    { name: 'Lazer', color: '#db2777', icon: '🎮' },
-    { name: 'Vestuário', color: '#0891b2', icon: '👕' },
-    { name: 'Serviços', color: '#6b7280', icon: '🔧' }
+    { name: 'Alimentação', color: '#dc2626', icon: 'Food' },
+    { name: 'Transporte', color: '#ea580c', icon: 'Car' },
+    { name: 'Moradia', color: '#1e40af', icon: 'Home' },
+    { name: 'Saúde', color: '#059669', icon: 'Health' },
+    { name: 'Educação', color: '#7c3aed', icon: 'Book' },
+    { name: 'Lazer', color: '#db2777', icon: 'Game' },
+    { name: 'Vestuário', color: '#0891b2', icon: 'Shirt' },
+    { name: 'Serviços', color: '#6b7280', icon: 'Tool' }
   ];
 
   for (const categoryData of expenseCategories) {
@@ -128,7 +128,7 @@ async function main() {
     });
   }
 
-  console.log('✅ Categorias padrão criadas');
+  console.log('Categorias padrão criadas');
 
   // Criar algumas transações de exemplo
   const sampleTransactions = [
@@ -182,7 +182,7 @@ async function main() {
     });
   }
 
-  console.log('✅ Transações de exemplo criadas');
+  console.log('Transações de exemplo criadas');
 
   // Criar orçamentos de exemplo
   const currentMonth = new Date().getMonth() + 1;
@@ -230,7 +230,7 @@ async function main() {
     });
   }
 
-  console.log('✅ Orçamentos de exemplo criados');
+  console.log('Orçamentos de exemplo criados');
 
   // Criar metas de exemplo
   const sampleGoals = [
@@ -262,17 +262,17 @@ async function main() {
     });
   }
 
-  console.log('✅ Metas de exemplo criadas');
+  console.log('Metas de exemplo criadas');
 
-  console.log('\n🎉 Seed concluído com sucesso!');
-  console.log('\n📋 Credenciais de acesso:');
-  console.log('👤 Admin: admin@financas.com / admin123');
-  console.log('👤 Usuário: user@financas.com / user123');
+  console.log('\nSeed concluído com sucesso!');
+  console.log('\nCredenciais de acesso:');
+  console.log('Admin: admin@financas.com / admin123');
+  console.log('Usuário: user@financas.com / user123');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Erro durante o seed:', e);
+    console.error('Erro durante o seed:', e);
     process.exit(1);
   })
   .finally(async () => {

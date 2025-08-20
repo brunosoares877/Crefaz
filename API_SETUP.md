@@ -1,11 +1,11 @@
 # Configuração da API
 
-## 📋 Pré-requisitos
+## Pré-requisitos
 
 - Node.js instalado
 - API backend rodando (seja local ou remota)
 
-## 🌍 Ambientes Configurados
+## Ambientes Configurados
 
 O projeto está configurado para trabalhar com 3 ambientes:
 
@@ -15,7 +15,7 @@ O projeto está configurado para trabalhar com 3 ambientes:
 | **Staging** | `https://8f2cf2e0-f3f6-472f-808e-e9006a830090.mock.pstmn.io` | Ambiente de testes |
 | **Production** | `https://86feaeec-b8ca-4c9c-acb4-bb301e4165f1.mock.pstmn.io` | Ambiente de produção |
 
-## 🔧 Configuração
+## Configuração
 
 ### 1. Variáveis de Ambiente
 
@@ -116,7 +116,7 @@ Verifica se a API está funcionando.
 }
 ```
 
-## 🚀 Como Usar
+## Como Usar
 
 ### Iniciar em diferentes ambientes:
 
@@ -163,7 +163,7 @@ npm run build:prod
 3. **Verifique as notificações** de sucesso/erro
 4. **Monitore o console** para logs de requisições
 
-## 🔍 Debugging
+## Debugging
 
 ### Verificar se a API está funcionando:
 ```javascript
@@ -178,7 +178,7 @@ checkApiHealth().then(console.log)
 - Preencha e envie o formulário
 - Verifique a requisição para `/api/leads`
 
-## 📝 Estrutura dos Dados
+## Estrutura dos Dados
 
 O formulário envia os seguintes dados:
 
@@ -190,7 +190,7 @@ O formulário envia os seguintes dados:
 | whatsapp | string | números | "11999999999" |
 | companhiaEnergia | string | texto | "Enel" |
 
-## ⚠️ Observações
+## Observações
 
 - Os dados são formatados automaticamente no frontend
 - CPF, telefone e data são limpos antes do envio
@@ -198,7 +198,7 @@ O formulário envia os seguintes dados:
 - Notificações aparecem para sucesso e erro
 - O formulário é limpo após sucesso
 
-## 🛠️ Personalização
+## Personalização
 
 Para personalizar a API:
 

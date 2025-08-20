@@ -66,8 +66,8 @@ export const getEndpoint = (env: string, endpointKey: keyof EnvironmentConfig['e
 // Função para alternar ambiente
 export const switchEnvironment = (env: string): EnvironmentConfig => {
   const config = getEnvironmentConfig(env)
-  console.log(`🔄 Ambiente alterado para: ${config.name}`)
-  console.log(`🌐 URL: ${config.url}`)
+      console.log(`Ambiente alterado para: ${config.name}`)
+      console.log(`URL: ${config.url}`)
   return config
 }
 

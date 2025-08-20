@@ -1,6 +1,6 @@
-# 🔧 Configurar Suas APIs Reais
+# Configurar Suas APIs Reais
 
-## 📋 Passo a Passo
+## Passo a Passo
 
 ### 1. **Editar o arquivo `src/config/environments.ts`**
 
@@ -9,8 +9,8 @@ Localize as linhas 15-18 e substitua pelas suas URLs reais:
 ```typescript
 export const REAL_API_URLS = {
   [ENVIRONMENTS.DEVELOPMENT]: 'http://localhost:3000/api',
-  [ENVIRONMENTS.STAGING]: 'https://sua-api-staging.com/api', // ⚠️ SUBSTITUIR
-  [ENVIRONMENTS.PRODUCTION]: 'https://sua-api-producao.com/api', // ⚠️ SUBSTITUIR
+  [ENVIRONMENTS.STAGING]: 'https://sua-api-staging.com/api', // SUBSTITUIR
+  [ENVIRONMENTS.PRODUCTION]: 'https://sua-api-producao.com/api', // SUBSTITUIR
 } as const
 ```
 
@@ -67,14 +67,14 @@ npm run dev
 
 E teste o formulário em: `http://localhost:3004`
 
-## 🚨 **IMPORTANTE:**
+## IMPORTANTE:
 
 1. **Substitua as URLs** pelas suas APIs reais
 2. **Verifique se os endpoints** estão corretos
 3. **Teste a API** antes de usar
 4. **Configure CORS** se necessário
 
-## 📞 **Precisa de ajuda?**
+## Precisa de ajuda?
 
 Se suas APIs têm formato diferente, me informe:
 - URLs das suas APIs

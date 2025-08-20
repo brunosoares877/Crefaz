@@ -1,4 +1,4 @@
-# 🚀 FinançasCRM - CRM Web Completo para Gestão Financeira
+# FinançasCRM - CRM Web Completo para Gestão Financeira
 
 Um sistema CRM web moderno e completo para gestão de finanças pessoais e empresariais, com tema escuro elegante, dashboard interativo e gráficos financeiros avançados.
 
@@ -16,7 +16,7 @@ Um sistema CRM web moderno e completo para gestão de finanças pessoais e empre
 - Importar extratos CSV/Excel
 - Filtros avançados por data, categoria e conta
 
-### 📊 Orçamentos
+### Orçamentos
 - Criar orçamentos mensais por categoria
 - Comparar orçado x realizado
 - Alertas automáticos ao atingir 80% e 100%
@@ -50,7 +50,7 @@ Um sistema CRM web moderno e completo para gestão de finanças pessoais e empre
 - Definir moeda e formato de data
 - Personalização completa
 
-## 🛠️ Stack de Desenvolvimento
+## Stack de Desenvolvimento
 
 ### Frontend
 - **React 18** + TypeScript
@@ -70,7 +70,7 @@ Um sistema CRM web moderno e completo para gestão de finanças pessoais e empre
 - **Multer** para upload de arquivos
 - **Express Validator** para validações
 
-## 🚀 Instalação e Configuração
+## Instalação e Configuração
 
 ### Pré-requisitos
 - Node.js 18+ 
@@ -129,7 +129,7 @@ O sistema estará disponível em:
 - **Frontend**: http://localhost:3000
 - **Backend**: http://localhost:5000
 
-## 👤 Credenciais de Acesso
+## Credenciais de Acesso
 
 Após executar o seed, você pode acessar com:
 
@@ -165,7 +165,7 @@ O sistema é totalmente responsivo e funciona perfeitamente em:
 - Tipografia Inter para melhor legibilidade
 - Ícones Lucide para consistência visual
 
-## 🔧 Scripts Disponíveis
+## Scripts Disponíveis
 
 ```bash
 # Desenvolvimento
@@ -233,7 +233,7 @@ financas-crm/
 - Filtros personalizáveis
 - Histórico de exportações
 
-## 🔒 Segurança
+## Segurança
 
 - Autenticação JWT segura
 - Hash de senhas com bcrypt
@@ -242,7 +242,7 @@ financas-crm/
 - CORS configurado adequadamente
 - Headers de segurança com Helmet
 
-## 🚀 Deploy
+## Deploy
 
 ### Backend
 ```bash

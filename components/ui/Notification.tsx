@@ -35,31 +35,31 @@ export const Notification: React.FC<NotificationProps> = ({
         return {
           backgroundColor: '#10b981',
           borderColor: '#059669',
-          icon: '✅',
+          icon: '✓',
         }
       case 'error':
         return {
           backgroundColor: '#ef4444',
           borderColor: '#dc2626',
-          icon: '❌',
+          icon: '✗',
         }
       case 'warning':
         return {
           backgroundColor: '#f59e0b',
           borderColor: '#d97706',
-          icon: '⚠️',
+          icon: '!',
         }
       case 'info':
         return {
           backgroundColor: '#3b82f6',
           borderColor: '#2563eb',
-          icon: 'ℹ️',
+          icon: 'i',
         }
       default:
         return {
           backgroundColor: '#6b7280',
           borderColor: '#4b5563',
-          icon: '📢',
+          icon: '•',
         }
     }
   }

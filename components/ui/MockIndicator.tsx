@@ -40,7 +40,7 @@ export const MockIndicator: React.FC = () => {
         gap: '0.5rem',
       }}
     >
-      <span>🧪</span>
+      <span>MOCK</span>
       <span>MOCK LOCAL</span>
     </div>
   )

@@ -5,11 +5,26 @@ const app = express()
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: "file:./dev.db"
+      url: "file:./prisma/dev.db"
     }
   }
 })
 const PORT = 3001
+
+// Middleware CORS para permitir requisições do frontend
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
+  
+  // Responder ao preflight request
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200)
+    return
+  }
+  
+  next()
+})
 
 app.use(express.json())
 
@@ -61,7 +76,7 @@ app.post('/api/leads', async (req, res) => {
       }
     })
 
-    console.log(`✅ Novo lead cadastrado: ${nome} (${cpf})`)
+    console.log(`Novo lead cadastrado: ${nome} (${cpf})`)
 
     res.status(201).json({
       success: true,
@@ -74,7 +89,7 @@ app.post('/api/leads', async (req, res) => {
     })
 
   } catch (error) {
-    console.error('❌ Erro ao cadastrar lead:', error)
+    console.error('Erro ao cadastrar lead:', error)
     res.status(500).json({
       success: false,
       message: 'Erro interno do servidor'
@@ -96,7 +111,7 @@ app.get('/api/leads', async (req, res) => {
     })
 
   } catch (error) {
-    console.error('❌ Erro ao buscar leads:', error)
+    console.error('Erro ao buscar leads:', error)
     res.status(500).json({
       success: false,
       message: 'Erro interno do servidor'
@@ -131,7 +146,7 @@ app.patch('/api/leads/:id/status', async (req, res) => {
     })
 
   } catch (error) {
-    console.error('❌ Erro ao atualizar status:', error)
+    console.error('Erro ao atualizar status:', error)
     res.status(500).json({
       success: false,
       message: 'Erro interno do servidor'
@@ -149,7 +164,7 @@ app.use('*', (req, res) => {
 
 // Middleware de tratamento de erros
 app.use((error, req, res, next) => {
-  console.error('❌ Erro não tratado:', error)
+      console.error('Erro não tratado:', error)
   res.status(500).json({
     success: false,
     message: 'Erro interno do servidor'
@@ -160,54 +175,54 @@ app.use((error, req, res, next) => {
 async function startServer() {
   try {
     await prisma.$connect()
-    console.log('✅ Conectado ao banco de dados')
+    console.log('Conectado ao banco de dados')
 
     const server = app.listen(PORT, () => {
-      console.log(`🚀 Servidor rodando na porta ${PORT}`)
-      console.log(`📊 Health check: http://localhost:${PORT}/health`)
-      console.log(`📝 API Leads: http://localhost:${PORT}/api/leads`)
-      console.log(`🔄 Servidor iniciado com sucesso!`)
+      console.log(`Servidor rodando na porta ${PORT}`)
+      console.log(`Health check: http://localhost:${PORT}/health`)
+      console.log(`API Leads: http://localhost:${PORT}/api/leads`)
+      console.log(`Servidor iniciado com sucesso!`)
     })
 
     // Tratamento de erros do servidor
     server.on('error', (error) => {
-      console.error('❌ Erro no servidor:', error)
+      console.error('Erro no servidor:', error)
     })
 
     // Graceful shutdown
     process.on('SIGINT', async () => {
-      console.log('\n🛑 Desligando servidor...')
+      console.log('\nDesligando servidor...')
       server.close(async () => {
         await prisma.$disconnect()
-        console.log('✅ Servidor desligado com sucesso')
+        console.log('Servidor desligado com sucesso')
         process.exit(0)
       })
     })
 
     process.on('SIGTERM', async () => {
-      console.log('\n🛑 Desligando servidor...')
+      console.log('\nDesligando servidor...')
       server.close(async () => {
         await prisma.$disconnect()
-        console.log('✅ Servidor desligado com sucesso')
+        console.log('Servidor desligado com sucesso')
         process.exit(0)
       })
     })
 
     // Prevenir crashes
     process.on('uncaughtException', (error) => {
-      console.error('❌ Erro não capturado:', error)
+      console.error('Erro não capturado:', error)
     })
 
     process.on('unhandledRejection', (reason, promise) => {
-      console.error('❌ Promise rejeitada não tratada:', reason)
+      console.error('Promise rejeitada não tratada:', reason)
     })
 
   } catch (error) {
-    console.error('❌ Erro ao iniciar servidor:', error)
+    console.error('Erro ao iniciar servidor:', error)
     process.exit(1)
   }
 }
 
 // Iniciar servidor
-console.log('🚀 Iniciando servidor...')
+console.log('Iniciando servidor...')
 startServer()

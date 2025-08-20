@@ -148,7 +148,7 @@ export const Footer: React.FC = () => {
             fontSize: typography.fontSize.base,
             fontFamily: typography.fontFamily.primary,
           }}>
-            <span>📞</span>
+            <span>Phone</span>
             <span>(84) 2030-2584</span>
           </div>
 
@@ -159,9 +159,9 @@ export const Footer: React.FC = () => {
             marginTop: '2rem'
           }}>
             {[
-              { text: 'Política de Privacidade', icon: '🔒', action: () => navigateTo('privacy') },
-              { text: 'Termos de Uso', icon: '📋', action: () => navigateTo('terms') },
-              { text: 'Reclame Aqui', icon: '📢', action: () => window.open('https://www.reclameaqui.com.br/', '_blank') },
+              { text: 'Política de Privacidade', icon: 'Lock', action: () => navigateTo('privacy') },
+              { text: 'Termos de Uso', icon: 'Doc', action: () => navigateTo('terms') },
+              { text: 'Reclame Aqui', icon: 'Chat', action: () => window.open('https://www.reclameaqui.com.br/', '_blank') },
             ].map((item, index) => (
               <div key={index} style={{
                 display: 'flex',
@@ -209,11 +209,11 @@ export const Footer: React.FC = () => {
             gap: '0.75rem',
           }}>
             {[
-              { name: 'Facebook', icon: '📘' },
-              { name: 'Instagram', icon: '📷' },
-              { name: 'YouTube', icon: '📺' },
-              { name: 'Google', icon: '🔍' },
-              { name: 'Twitter', icon: '🐦' },
+              { name: 'Facebook', icon: 'Book' },
+              { name: 'Instagram', icon: 'Camera' },
+              { name: 'YouTube', icon: 'TV' },
+              { name: 'Google', icon: 'Search' },
+              { name: 'Twitter', icon: 'Bird' },
             ].map((social, index) => (
               <div key={index} style={{
                 display: 'flex',
