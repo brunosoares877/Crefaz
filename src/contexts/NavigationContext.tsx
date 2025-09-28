@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react'
 
-type Page = 'home' | 'terms' | 'privacy'
+type Page = 'home' | 'terms' | 'privacy' | 'crefaz-demo' | 'crefaz-dashboard' | 'admin'
 
 interface NavigationContextType {
   currentPage: Page

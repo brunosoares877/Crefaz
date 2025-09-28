@@ -11,6 +11,28 @@ export interface EnvironmentConfig {
   }
 }
 
+// Configuração específica para API Crefaz On
+export interface CrefazApiConfig {
+  name: string
+  baseUrl: string
+  clientId: string
+  clientSecret?: string
+  timeout: number
+  enableLogs: boolean
+  endpoints: {
+    auth: string
+    leads: string
+    documents: string
+    proposals: string
+    clients: string
+    contracts: string
+    users: string
+    products: string
+    wallets: string
+    institutions: string
+  }
+}
+
 export const ENVIRONMENTS: Record<string, EnvironmentConfig> = {
   local: {
     name: 'Local',
@@ -99,4 +121,59 @@ export const isStaging = (env: string): boolean => {
 // Função para verificar se ambiente é produção
 export const isProduction = (env: string): boolean => {
   return env === 'production'
+}
+
+// Configurações da API Crefaz On
+export const CREFAZ_API_CONFIG: Record<string, CrefazApiConfig> = {
+  staging: {
+    name: 'Crefaz On - Staging',
+    baseUrl: 'https://api.crefaz.com.br',
+    clientId: '8f2cf2e0-f3f6-472f-808e-e9006a830090',
+    timeout: 30000,
+    enableLogs: true,
+    endpoints: {
+      auth: '/oauth/token',
+      leads: '/leads',
+      documents: '/documents',
+      proposals: '/proposals',
+      clients: '/clients',
+      contracts: '/contracts',
+      users: '/users',
+      products: '/products',
+      wallets: '/wallets',
+      institutions: '/institutions'
+    }
+  },
+  production: {
+    name: 'Crefaz On - Production',
+    baseUrl: 'https://api.crefaz.com.br',
+    clientId: '86feaeec-b8ca-4c9c-acb4-bb301e4165f1',
+    timeout: 30000,
+    enableLogs: false,
+    endpoints: {
+      auth: '/oauth/token',
+      leads: '/leads',
+      documents: '/documents',
+      proposals: '/proposals',
+      clients: '/clients',
+      contracts: '/contracts',
+      users: '/users',
+      products: '/products',
+      wallets: '/wallets',
+      institutions: '/institutions'
+    }
+  }
+}
+
+// Função para obter configuração da API Crefaz On
+export const getCrefazApiConfig = (env: string = 'staging'): CrefazApiConfig => {
+  return CREFAZ_API_CONFIG[env] || CREFAZ_API_CONFIG.staging
+}
+
+// Função para obter URL completa de um endpoint da API Crefaz On
+export const getCrefazEndpoint = (env: string, endpointKey: keyof CrefazApiConfig['endpoints']): string => {
+  const config = getCrefazApiConfig(env)
+  const baseUrl = config.baseUrl
+  const endpoint = config.endpoints[endpointKey]
+  return `${baseUrl}${endpoint}`
 }

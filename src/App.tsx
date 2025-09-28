@@ -6,6 +6,9 @@ import { Footer } from '../components/layout/Footer'
 import { EnvironmentInfo } from '../components/ui/EnvironmentInfo'
 import { TermsOfService } from '../components/pages/TermsOfService'
 import { PrivacyPolicy } from '../components/pages/PrivacyPolicy'
+import CrefazLeadsDemo from './components/CrefazLeadsDemo'
+import CrefazDashboard from './components/CrefazDashboard'
+import AdminPanel from './components/AdminPanel'
 import { NavigationProvider, useNavigation } from './contexts/NavigationContext'
 import { colors } from '../styles/design-tokens'
 
@@ -18,6 +21,62 @@ const AppContent: React.FC = () => {
 
   if (currentPage === 'privacy') {
     return <PrivacyPolicy />
+  }
+
+  if (currentPage === 'crefaz-demo') {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', padding: '2rem 1rem' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
+            <button
+              onClick={() => useNavigation().navigateTo('home')}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: '#6b7280',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.375rem',
+                cursor: 'pointer',
+                marginBottom: '1rem'
+              }}
+            >
+              ← Voltar para Home
+            </button>
+          </div>
+          <CrefazLeadsDemo />
+        </div>
+      </div>
+    )
+  }
+
+  if (currentPage === 'crefaz-dashboard') {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#f3f4f6', padding: '2rem 1rem' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
+            <button
+              onClick={() => useNavigation().navigateTo('home')}
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: '#6b7280',
+                color: 'white',
+                border: 'none',
+                borderRadius: '0.375rem',
+                cursor: 'pointer',
+                marginBottom: '1rem'
+              }}
+            >
+              ← Voltar para Home
+            </button>
+          </div>
+          <CrefazDashboard />
+        </div>
+      </div>
+    )
+  }
+
+  if (currentPage === 'admin') {
+    return <AdminPanel />
   }
 
   // Página home
@@ -102,9 +161,6 @@ const AppContent: React.FC = () => {
       
       {/* Footer */}
       <Footer />
-      
-      {/* Indicador de Ambiente */}
-      <EnvironmentInfo />
     </div>
   )
 }
